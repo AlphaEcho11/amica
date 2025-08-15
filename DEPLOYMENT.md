@@ -1,10 +1,11 @@
 # Amica Deployment Guide
 
-This guide provides instructions for setting up and running Amica locally. There are three main ways to run Amica:
+This guide provides instructions for setting up and running Amica locally. There are several ways to run Amica:
 
-1.  **Run the web application in development mode:** The quickest way to get started and see your changes.
-2.  **Run the web application with Docker:** The recommended way to run the application in a production-like environment.
-3.  **Run the desktop application:** For running Amica as a standalone desktop app.
+*   **Web Application Only (Development):** For frontend development without running the desktop shell.
+*   **Desktop Application (Development):** Runs both the web server and the Electron app for integrated development.
+*   **Web Application (Docker):** The recommended way to run the web application in a production-like environment.
+*   **Desktop Application (Production Build):** To create a distributable desktop application.
 
 ---
 
@@ -15,26 +16,13 @@ Before you begin, ensure you have the following software installed:
 *   **Node.js:** Version `18.18.0` or newer. You can download it from the [official Node.js website](https://nodejs.org/).
 *   **npm** or **yarn**: A package manager for Node.js.
 *   **Git**: For cloning the repository.
-*   **Docker** (Optional): Required for running the application with Docker. You can get it from the [Docker website](https://www.docker.com/get-started).
-*   **Rust** (Optional): Required for building the desktop application. Install it using `rustup` from the [official Rust website](https://www.rust-lang.org/tools/install).
+*   **Rust**: Required for building the native modules used by the application. Install it using `rustup` from the [official Rust website](https://www.rust-lang.org/tools/install). The native modules are built automatically during `npm install`.
+*   **Docker** (Optional): Required if you want to run the application with Docker. You can get it from the [Docker website](https://www.docker.com/get-started).
+
 
 ---
 
-## 2. Configuration
-
-Amica is configured using an `.env.local` file. You can create this file by copying the example file if one exists, or by creating a new file in the root of the project.
-
-```bash
-cp .env.local.example .env.local
-```
-
-If `.env.local.example` does not exist, create `.env.local` and add the necessary environment variables. You can find a list of available options in `src/utils/config.ts`.
-
----
-
-## 3. Running the Web Application (Development Mode)
-
-This method is ideal for development and testing.
+## 2. Initial Setup
 
 #### Step 1: Clone the Repository
 
@@ -45,23 +33,54 @@ cd amica
 
 #### Step 2: Install Dependencies
 
+This command will install all necessary packages and build the Rust native modules.
+
 ```bash
 npm install
 ```
 
-#### Step 3: Run the Development Server
+#### Step 3: Configure the Application
+
+Amica is configured using an `.env.local` file. You can create this file by copying the example file if one exists, or by creating a new file in the root of the project.
+
+```bash
+# cp .env.local.example .env.local
+```
+
+If `.env.local.example` does not exist, create `.env.local` and add the necessary environment variables. You can find a list of available options in `src/utils/config.ts`.
+
+
+---
+
+## 3. Running in Development Mode
+
+### Web Application Only
+
+If you only want to run the web interface (for example, for UI development), use this command:
+
+```bash
+npm run dev:next
+```
+
+The application will be available at [http://localhost:3000](http://localhost:3000).
+
+### Desktop Application
+
+To run the full desktop application in development mode, which includes the web server and the Electron app, use this command:
 
 ```bash
 npm run dev
 ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000).
+This will launch the Electron application, and changes to the code will trigger hot-reloading.
 
 ---
 
-## 4. Building and Running with Docker
+## 4. Building for Production
 
-This method uses Docker and Docker Compose to build and run the application in a container. This is the recommended way to run the application in a production-like environment.
+### Web Application (Docker)
+
+This method uses Docker and Docker Compose to build and run the web application in a container.
 
 #### Step 1: Build and Run the Container
 
@@ -83,35 +102,12 @@ To stop the container, run:
 docker-compose down
 ```
 
----
+### Desktop Application
 
-## 5. Building the Desktop Application
-
-Amica can be run as a standalone desktop application using Tauri.
-
-#### Step 1: Install Desktop-Specific Dependencies
-
-On Linux, you may need to install additional packages:
+To build the final, standalone executable for the desktop application, run the following command:
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
+npm run build
 ```
 
-#### Step 2: Run the Application in Development Mode
-
-This command will build and launch the desktop application in a development window with hot-reloading.
-
-```bash
-npm run tauri dev
-```
-
-#### Step 3: Build the Application for Production
-
-To build the final, standalone executable, run the following command:
-
-```bash
-npm run tauri build
-```
-
-The build process will create an executable file in the `src-tauri/target/release/bundle/` directory. The output will vary depending on your operating system (e.g., `.msi` on Windows, `.app` and `.dmg` on macOS, `.AppImage` and `.deb` on Linux).
+This command bundles both the web application and the Electron shell. The build process will create an executable file in the `dist/` directory. The output will vary depending on your operating system (e.g., a `.exe` installer on Windows, a `.dmg` on macOS, or an `.AppImage` on Linux).
