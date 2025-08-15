@@ -6,7 +6,7 @@
   "main": "electron/main.js",
   "scripts": {
     "dev": "npm run generate:paths && concurrently \"npm:dev:next\" \"npm:dev:electron\"",
-    "dev:next": "cross-env NODE_OPTIONS='--max-old-space-size=4096' next dev",
+    "dev:next": "npx cross-env NODE_OPTIONS='--max-old-space-size=4096' next dev",
     "dev:electron": "wait-on http://localhost:3000 && tsc electron/main.ts electron/preload.ts && electron .",
     "build": "npm run build:next && npm run build:electron",
     "build:next": "next build && next export",
