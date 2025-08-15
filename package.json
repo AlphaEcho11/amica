@@ -108,5 +108,16 @@
   },
   "engines": {
     "node": ">=18.18.0"
+  },
+  "build": {
+    "appId": "com.heyamica.app",
+    "productName": "Amica",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "electron/**/*"
+    ]
   }
 }
