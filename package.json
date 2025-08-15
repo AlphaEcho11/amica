@@ -6,7 +6,7 @@
   "main": "electron/main.js",
   "scripts": {
     "dev": "npm run generate:paths && concurrently \"npm:dev:next\" \"npm:dev:electron\"",
-    "dev:next": "NODE_OPTIONS='--max-old-space-size=4096' next dev",
+    "dev:next": "cross-env NODE_OPTIONS='--max-old-space-size=4096' next dev",
     "dev:electron": "wait-on http://localhost:3000 && tsc electron/main.ts electron/preload.ts && electron .",
     "build": "npm run build:next && npm run build:electron",
     "build:next": "next build && next export",
@@ -76,12 +76,8 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "wait-on": "^7.2.0",
-    "electron": "^31.2.1",
-    "electron-builder": "^25.0.0",
-    "@napi-rs/cli": "^2.18.2",
     "@gltf-transform/core": "^4.0.10",
+    "@napi-rs/cli": "^2.18.2",
     "@types/dom-speech-recognition": "^0.0.4",
     "@types/file-saver": "^2.0.7",
     "@types/formidable": "^3.4.5",
@@ -89,7 +85,11 @@
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "@types/three": "^0.169.0",
+    "concurrently": "^8.2.2",
     "copy-webpack-plugin": "^12.0.2",
+    "cross-env": "^10.0.0",
+    "electron": "^31.2.1",
+    "electron-builder": "^25.0.0",
     "esbuild": "^0.24.0",
     "eslint-config-next": "^14.2.13",
     "eslint-config-prettier": "^9.1.0",
@@ -103,6 +103,7 @@
     "process": "^0.11.10",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.6.2",
+    "wait-on": "^7.2.0",
     "webpack": "^5.89.0"
   },
   "engines": {
